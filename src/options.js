@@ -1,21 +1,25 @@
 
 // Saves options to chrome.storage
 function saveOptions() {
-    var obsidianVaultName = document.getElementById('obsidian_vault_name').value;
+    var obsidianVaultURL = document.getElementById('obsidian_vault_url').value;
+    var obsidianVaultKey = document.getElementById('obsidian_vault_key').value;
     var obsidianNoteName = document.getElementById('obsidian_note_name').value;
     var obsidianNoteFormat = document.getElementById('obsidian_note_format').value;
     var selectAsMarkdown = document.getElementById('select_as_markdown').checked;
     var clipAsNewNote = document.getElementById('clip_as_new_note').checked;
+    var existingNoteMatchString = document.getElementById('existing_note_match').value;
     var datetimeFormat = document.getElementById('datetime_format').value;
     var dateFormat = document.getElementById('date_format').value;
     var timeFormat = document.getElementById('time_format').value;
 
     chrome.storage.sync.set({
-        obsidianVaultName: obsidianVaultName,
+        obsidianVaultURL: obsidianVaultURL,
+        obsidianVaultKey: obsidianVaultKey,
         obsidianNoteName: obsidianNoteName,
         selectAsMarkdown, selectAsMarkdown,
         obsidianNoteFormat, obsidianNoteFormat,
         clipAsNewNote: clipAsNewNote,
+        existingNoteMatchString: existingNoteMatchString,
         datetimeFormat: datetimeFormat,
         dateFormat: dateFormat,
         timeFormat: timeFormat,
@@ -33,22 +37,26 @@ function saveOptions() {
 // stored in chrome.storage.
 function restoreOptions() {
     chrome.storage.sync.get({
-        obsidianVaultName: 'obsidian',
+        obsidianVaultURL: '',
+        obsidianVaultKey: '',
         obsidianNoteName: 'Chrome Clippings',
         selectAsMarkdown: false,
         obsidianNoteFormat: `> {clip},
 
 Clipped from [{title}]({url}) at {date}.`,
         clipAsNewNote: true,
+        existingNoteMatchString: '',
         datetimeFormat: "YYYY-MM-DD HH:mm:ss",
         dateFormat: "YYYY-MM-DD",
         timeFormat: "HH:mm:ss",
     }, function(options) {
-        document.getElementById('obsidian_vault_name').value = options.obsidianVaultName;
+        document.getElementById('obsidian_vault_url').value = options.obsidianVaultURL;
+        document.getElementById('obsidian_vault_key').value = options.obsidianVaultKey;
         document.getElementById('obsidian_note_name').value = options.obsidianNoteName;
         document.getElementById('obsidian_note_format').value = options.obsidianNoteFormat;
         document.getElementById('select_as_markdown').checked = options.selectAsMarkdown;
         document.getElementById('clip_as_new_note').checked = options.clipAsNewNote;
+        document.getElementById('existing_note_match').value = options.existingNoteMatchString;
         document.getElementById('datetime_format').value = options.datetimeFormat;
         document.getElementById('date_format').value = options.dateFormat;
         document.getElementById('time_format').value = options.timeFormat;

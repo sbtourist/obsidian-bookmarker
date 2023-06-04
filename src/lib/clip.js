@@ -9,11 +9,13 @@ export const create = async (testing=false) => {
 // Clipped from [{title}]({url}) at {date}.`
 
     let defaultClippingOptions = {
-        obsidianVaultName: 'Obsidian',
+        obsidianVaultURL: '',
+        obsidianVaultKey: '',
         selectAsMarkdown: false,
         obsidianNoteFormat: defaultNoteFormat,
         obsidianNoteName: "Chrome Clippings",
         clipAsNewNote: true,
+        existingNoteMatchString: '',
         dateFormat: "YYYY-MM-DD",
         datetimeFormat: "YYYY-MM-DD HH:mm:ss",
         timeFormat: "HH:mm:ss",
@@ -28,6 +30,7 @@ export const create = async (testing=false) => {
     let clippingOptions = await getFromStorage(defaultClippingOptions)
 
     let note = clippingOptions.obsidianNoteFormat
+    let existingNoteMatchString= clippingOptions.existingNoteMatchString
     
     let date = moment().format(clippingOptions.dateFormat)
     let datetime = moment().format(clippingOptions.datetimeFormat)
@@ -84,6 +87,8 @@ export const create = async (testing=false) => {
     note = note.replace(/{url}/g, url)
     note = note.replace(/{title}/g, title)
     note = note.replace(/{zettel}/g, zettel)
+    existingNoteMatchString = existingNoteMatchString.replace(/{url}/g, url)
+    existingNoteMatchString = existingNoteMatchString.replace(/{title}/g, title)
 
     // Clip the og:image if it exists
     if (document.querySelector('meta[property="og:image"]')) {
@@ -111,8 +116,10 @@ export const create = async (testing=false) => {
         'testing': testing,
         'noteName': noteName,
         'note': note,
-        'vault': clippingOptions.obsidianVaultName,
-        'new': clippingOptions.clipAsNewNote
+        'url': clippingOptions.obsidianVaultURL,
+        'key': clippingOptions.obsidianVaultKey,
+        'clipAsNewNote': clippingOptions.clipAsNewNote,
+        'existingNoteMatchString': existingNoteMatchString
     }
     console.log("sending data...", data)
     chrome.runtime.sendMessage(data)

@@ -1,1 +1,4 @@
 key.pem
+src.pem
+package*.json
+src/node_modules

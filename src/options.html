@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Obsidian Clipper</title>
+        <title>Obsidian Bookmarker</title>
         <meta charset="UTF-8">
         <link rel="stylesheet" href="options.css">
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
@@ -11,40 +11,53 @@
 
         <main>
 
-            <h1>Obsidian Clipper</h1>
+            <h1>Obsidian Bookmarker</h1>
             <hr>
-            <h2 class="subtitle">An unoffical clipper</h2>
+            <h2 class="subtitle">Turn Obsidian into your bookmark manager</h2>
 
             <p class="description"> 
-                This is an unofficial clipper for <a href="https://obsidian.md/">Obsidian</a> that allows you to easily clip a selection to a note in 
-                Obsidian. Made by <a href="http://jplattel.nl/">Joost Plattel</a>. 
-                This plugin is available as open-source on <a href="https://github.com/jplattel/obsidian-clipper">Github</a>.
+                This is an unofficial extension for <a href="https://obsidian.md/">Obsidian</a> that allows you to easily bookmark a webpage and 
+                clip a webpage selection to a note in Obsidian.
             </p>
 
-            <p class="description">At this page you can configure the vault & note to append the clip to. Please test the configuration</p>
+            <p class="description">Here you can configure the extension and test the configuration.</p>
 
             <div class="form-group">
-                <label for="obsidian_vault_name">Vault name <small>(just the name, like 'obsidian' or 'notes')</small></label>
-                <input id="obsidian_vault_name" name="obsidian_vault_name" type="text" placeholder="obsidian">
+                <label for="obsidian_vault_url">Vault URL (requires Local REST API for Obsidian plugin)</label>
+                <input id="obsidian_vault_url" name="obsidian_vault_url" type="text">
+            </div>
+
+            <div class="form-group">
+                <label for="obsidian_vault_key">Vault API Key (requires Local REST API for Obsidian plugin)</label>
+                <input id="obsidian_vault_key" name="obsidian_vault_key" type="text">
             </div>
             
             <div class="form-group">
-                <input data-toggle="toggle" name="clip_as_new_note" type="checkbox" id="clip_as_new_note">
                 <label for="clip_as_new_note">
-                    Clip and create a new note
-                    <small class="small">(otherwise the specified note is opened content is appended)</small>
+                    Clip as New: creates a new bookmark and clips to it only if a note doesn't already exists with the same name or match (see below);
+                    otherwise, if an existing note is found, the clip will be added to it.
                 </label>
+                <input data-toggle="toggle" name="clip_as_new_note" type="checkbox" id="clip_as_new_note">
             </div>
             
             <div class="form-group">
-                <label for="obsidian_note_name">Note to clip to <small>(You can specify the a folder as well, like `notes/{title}-{date}`)</small></label>
+                <label for="obsidian_note_name">Note Name (you can specify the a folder as well, like `notes/{title}-{date}`)</label>
                 <input id="obsidian_note_name" name="obsidian_note_name" type="text" placeholder="clips/{zettel}">
                 <small class="form-text grey">Use {date}, {datetime}, {year}, {month}, {day}, {time}, {title} and {zettel} as placeholders </small>
             </div>
 
             <div class="form-group">
+                <label for="existing_note_match">
+                    Note Match: if not empty, it will try to first match an existing note against the provided text string,
+                    and if found it will either append to it or skip the bookmark.
+                </label>
+                <input id="existing_note_match" name="existing_note_match" type="text">
+                <small class="form-text grey">Use {title} and {link} as placeholders </small>
+            </div>
+
+            <div class="form-group">
                 <label for="obsidian_note_format">Clipping format </label>
-                <label id="reset">(reset)</label>
+                <label id="reset"> (reset)</label>
                 <textarea class="form-control" rows="6" id="obsidian_note_format" name="obsidian_note_format" type="text">> {clip}
 
 Clipped from [{title}]({url}) at {date}.</textarea>
@@ -52,11 +65,10 @@ Clipped from [{title}]({url}) at {date}.</textarea>
             </div>
 
             <div class="form-group">
-                <input data-toggle="toggle" name="select_as_markdown" type="checkbox" id="select_as_markdown">
                 <label for="select_as_markdown">Clip html as markdown <span class="grey">(just plain text by default)</span></label>
+                <input data-toggle="toggle" name="select_as_markdown" type="checkbox" id="select_as_markdown">
             </div>
 
-            
             <div class="form-group">
                 <label for="datetime_format">Datetime format</label>
                 <input id="datetime_format" name="datetime_format" type="text" placeholder="YYYY-MM-DD HH:MM:SS">
@@ -72,7 +84,7 @@ Clipped from [{title}]({url}) at {date}.</textarea>
             
             <div id="status"></div>
 
-            <button style="margin-bottom: 20px;" id="save">Save vault & note configuration</button>
+            <button style="margin-bottom: 20px;" id="save">Save configuration</button>
             <button id="test">Test configuration</button>
 
         </main>
@@ -80,6 +92,5 @@ Clipped from [{title}]({url}) at {date}.</textarea>
     <script src="lib/moment.js"></script>    
     <script src="options.js"></script>
 
-    <a target="_blank" rel="noopener" class="by-jplattel" href="https://jplattel.nl/"><img src="https://jplattel.nl/img/joostplattel_small_cropped.png" /><p>by jplattel</p></a>
 </body>
 </html>

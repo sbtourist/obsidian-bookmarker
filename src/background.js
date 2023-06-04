@@ -1,10 +1,7 @@
-// This runs in the background.. waiting for the icon to be clicked.. 
-// It then loads the libraries required and runs the clip.js script.
-// clip.js copies the content and adds it to your clipboard
-// Then this script creates a new tab with a redirect that opens the
-// Obsidian vault with the specified note.
-// Load files necessary for clipping
-
+// This runs in the background, waiting for the toolbar icon to be clicked.
+// It then loads the libraries required and runs the clip.js script via run.js.
+// clip.js copies the content and sends a message to the background worker.
+// Then this script, the background worker, sends the proper requests to the Obsidian REST API.
 
 chrome.action.onClicked.addListener(async function (tab) {
     chrome.scripting.executeScript({
@@ -27,31 +24,76 @@ chrome.action.onClicked.addListener(async function (tab) {
 chrome.runtime.onMessage.addListener(async function listener(result) {
     console.log(result)
     const clipAsNewNote = result.clipAsNewNote
-    const vault = result.vault
-    const noteName = result.noteName
-    const note = encodeURIComponent(result.note)
+    const existingNoteMatchString = result.existingNoteMatchString
+    const note = result.note
     
-    // const baseURL = 'http://localhost:8080'; // Used for testing...
-    const baseURL = 'https://jplattel.github.io/obsidian-clipper'
-    
-    let redirectUrl;
-    // Redirect to page (which opens obsidian).
+    const baseURL = result.url;
+    const headers = new Headers();
+    headers.append("Authorization", "Bearer " + result.key);
+
+    let noteName = result.noteName + ".md"
+
+    if (existingNoteMatchString) {
+        headers.append("Content-Type", "application/json");
+        const options = {
+            method: "POST",
+            headers: headers
+        }
+        const searchUrl = `${baseURL}/search/simple/?query=${encodeURIComponent(existingNoteMatchString)}`
+        const result = await (await fetch(searchUrl, options)).json();
+        if (result.length > 1) {
+            chrome.notifications.create('', {
+                title: 'Obsidian Bookmarker',
+                message: 'Not bookmarking because multiple notes match the following text: ' + existingNoteMatchString,
+                iconUrl: 'icons/favicon-48x48.png',
+                type: 'basic'
+            });
+            return;
+        }
+        else if (result.length == 1 && result[0]) {
+            noteName = result[0].filename;
+        }
+        headers.delete("Content-Type")
+    }
+
+    const noteUrl = `${baseURL}/vault/${encodeURIComponent(noteName)}`
+
     if (clipAsNewNote) {
-        redirectUrl = `${baseURL}/clip-to-new.html?vault=${encodeURIComponent(vault)}&note=${encodeURIComponent(noteName)}&content=${encodeURIComponent(note)}`
-    } else {
-        redirectUrl = `${baseURL}/clip.html?vault=${encodeURIComponent(vault)}&note=${encodeURIComponent(noteName)}&content=${encodeURIComponent(note)}`
+        headers.append("Content-Type", "application/json");
+        const options = {
+            method: "GET",
+            headers: headers
+        }
+        const exists = await fetch(noteUrl, options);
+        if (exists.ok) {
+            chrome.notifications.create('', {
+                title: 'Obsidian Bookmarker',
+                message: 'Not bookmarking because the following note already exists: ' + noteName,
+                iconUrl: 'icons/favicon-48x48.png',
+                type: 'basic'
+            });
+            return;
+        }
+        headers.delete("Content-Type")
     }
-    
-    // Open a new tab for clipping through the protocol, since we cannot go from the extension to this..
-    if (result.testing) {
-        chrome.tabs.create({ url: redirectUrl , active: true},function(obsidianTab){
-            // Since we're testing, we are not closing the tag...
-        });
-    } else {
-        chrome.tabs.create({ url: redirectUrl , active: true},function(obsidianTab){
-            setTimeout(function() { chrome.tabs.remove(obsidianTab.id) }, 500);
-        });
+
+    headers.append("Content-Type", "text/markdown");
+    const options = {
+        method: "POST",
+        headers: headers,
+        body: note
     }
+    fetch(noteUrl, options).then((response) => {
+        if (response.ok)
+            chrome.notifications.create('', {
+                title: 'Obsidian Bookmarker',
+                message: 'Bookmarked at: ' + noteName,
+                iconUrl: 'icons/favicon-48x48.png',
+                type: 'basic'
+            });
+        else
+            response.text().then((message) => console.log(message));
+    });
 });
 
 // On install open the options page:

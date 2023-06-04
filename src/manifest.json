@@ -1,9 +1,9 @@
 {
-    "name": "Obsidian Clipper",
-    "version": "0.5.0",
+    "name": "Obsidian Bookmarker",
+    "version": "1.0.0",
     "manifest_version": 3,
-    "description": "A small chrome plugin that let's you easily clip things to Obsidian",
-    "homepage_url": "https://github.com/jplattel/obsidian-clipper",
+    "description": "A chrome plugin that let's you bookmark and clip things to Obsidian",
+    "homepage_url": "https://github.com/sbtourist/obsidian-bookmarker",
     "background": {
         "service_worker": "background.js",
         "type": "module"
@@ -13,16 +13,14 @@
         "open_in_tab": true
     },
     "action": {
-        "default_title": "Clip selection to Obsidian"
+        "default_title": "Bookmark to Obsidian"
     },
     "permissions": [
         "activeTab",
         "clipboardWrite",
         "storage",
-        "scripting"
-    ],
-    "host_permissions": [
-        "https://jplattel.github.io/obsidian-clipper/clip.html"
+        "scripting",
+        "notifications"
     ],
     "web_accessible_resources": [
         {
