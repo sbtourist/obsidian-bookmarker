@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Obsidian Bookmarker</title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="styles/options.css">
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+    </head>
+    <body>
+
+        <main>
+
+            <h1>Obsidian Bookmarker</h1>
+            <hr>
+            <h2 class="subtitle">Turn Obsidian into your bookmark manager</h2>
+
+            <p class="description"> 
+                This is an unofficial extension for <a href="https://obsidian.md/">Obsidian</a> that allows to easily bookmark a webpage and 
+                clip a selection to a note in Obsidian.
+            </p>
+
+            <p class="description">Here you can configure the extension and test the configuration.</p>
+
+            <div class="form-group">
+                <label for="obsidian_vault_url">Vault URL (requires Local REST API for Obsidian plugin)</label>
+                <input id="obsidian_vault_url" name="obsidian_vault_url" type="text">
+            </div>
+
+            <div class="form-group">
+                <label for="obsidian_vault_key">Vault API Key (requires Local REST API for Obsidian plugin)</label>
+                <input id="obsidian_vault_key" name="obsidian_vault_key" type="text">
+            </div>
+            
+            <div class="form-group">
+                <label class="container">Match By Query: if enabled, creates a new bookmark and clips to it only if a note
+                    matching the given Obsidian query (see below) doesn't already exist;
+                    otherwise, if disabled, only the note name will be used to check for existing notes.
+                    Please note the note name is always used, because duplicate notes are not permitted.
+                    <input name="match_by_query" type="checkbox" id="match_by_query">
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label for="obsidian_query">
+                    Obsidian Query: if "Match By Query" is enabled, it will look for existing notes matching the provided query.
+                </label>
+                <input id="obsidian_query" name="obsidian_query" type="text">
+                <span class="form-text grey">Use {title} and {url} as placeholders </span>
+            </div>
+            
+            <div class="form-group">
+                <label for="obsidian_note_name">Note Name (you can specify the a folder as well, like `notes/{title}-{date}`)</label>
+                <input id="obsidian_note_name" name="obsidian_note_name" type="text" placeholder="clips/{zettel}">
+                <span class="form-text grey">Use {date}, {datetime}, {year}, {month}, {day}, {time}, {title} and {zettel} as placeholders </span>
+            </div>
+
+            <div class="form-group">
+                <label for="obsidian_note_format">Clipping format </label>
+                <textarea class="form-control" rows="6" id="obsidian_note_format" name="obsidian_note_format" type="text">> {clip}
+
+Clipped from [{title}]({url}) at {date}.</textarea>
+                <span class="form-text grey">Use {clip}, {date}, {datetime}, {year}, {month}, {day}, {time}, {title}, {zettel}, {og:image} and {url} as placeholders </span>
+            </div>
+
+            <div class="form-group">
+                <label class="container">Clip html as markdown <span class="grey">(just plain text by default)</span>
+                    <input name="select_as_markdown" type="checkbox" id="select_as_markdown">
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label for="datetime_format">Datetime format</label>
+                <input id="datetime_format" name="datetime_format" type="text" placeholder="YYYY-MM-DD HH:MM:SS">
+            </div>
+            <div class="form-group">
+                <label for="date_format">Date format</label>
+                <input id="date_format" name="date_format" type="text" placeholder="YYYY-MM-DD">
+            </div>
+            <div class="form-group">
+                <label for="time_format">Time format</label>
+                <input id="time_format" name="time_format" type="text" placeholder="HH:mm:ss">
+            </div>
+            
+            <div id="status"></div>
+
+            <button style="margin-bottom: 20px;" id="save">Save configuration</button>
+            <button id="test">Test configuration</button>
+            
+            <h2>Credits</h2>
+            
+            <p class="description">
+                This is a fork of <a href="https://github.com/jplattel/obsidian-clipper/">Obsidian Clipper</a>, kudos to the
+                original author!
+            </p>
+
+        </main>
+
+    <script src="options.js"></script>
+
+</body>
+</html>

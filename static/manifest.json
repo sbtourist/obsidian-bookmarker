@@ -1,0 +1,43 @@
+{
+    "name": "Obsidian Bookmarker",
+    "version": "1.0.0",
+    "manifest_version": 3,
+    "description": "A chrome plugin that let's you bookmark and clip things to Obsidian",
+    "homepage_url": "https://github.com/sbtourist/obsidian-bookmarker",
+    "background": {
+        "service_worker": "serviceWorker.js",
+        "type": "module"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "bookmarkListener.js"
+            ]
+        }
+    ],
+    "options_ui": {
+        "page": "options.html",
+        "open_in_tab": true
+    },
+    "action": {
+        "default_title": "Bookmark to Obsidian"
+    },
+    "host_permissions": [
+        "<all_urls>"
+    ],
+    "permissions": [
+        "activeTab",
+        "clipboardWrite",
+        "storage",
+        "scripting",
+        "notifications",
+        "tabs"
+    ],
+    "icons": {
+        "32": "/icons/32x.png",
+        "64": "/icons/64x.png"
+    }
+}
