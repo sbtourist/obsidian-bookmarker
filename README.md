@@ -17,16 +17,19 @@ Practically speaking, this transforms your Obsidian vault in a fast and powerful
 1. Install the [Local Rest API](https://github.com/coddingtonbear/obsidian-local-rest-api) Obsidian plugin to your vault.
 2. Download the plugin certificate via the plugin settings.
 3. Install the certificate as a trusted authority in `chrome://settings/certificates`.
-4. Obsidian must be running.
+4. Make sure Obsidian is running when using the extension.
 
-### Manually (packed)
+### Install a Release
 
-Coming soon.
+1.  Download the release you wish to install from github (i.e. `obsidian-bookmarker-1.0.0.crx`).
+2.  Navigate to [Chrome Extensions](chrome://extensions) and:
+    1. If not already enabled, enable developer mode (top right of your window).
+    2. Drag the downloaded file (i.e. `obsidian-bookmarker-1.0.0.crx`) onto the extensions page.
 
-### Manually (unpacked)
+### Install from Sources
 
 1.  Download/clone this repository.
-2.  Navigate to the [Chrome Extension](chrome://extensions) and enable developer mode (top right of your window).
+2.  Navigate to [Chrome Extensions](chrome://extensions) and enable developer mode (top right of your window).
 3.  Load unpacked extension and navigate to the `src` folder of this repository you just downloaded or cloned.
 4.  Chrome will now build the extension and you can use the extension menu to pin in to the user interface.
 5.  You're now ready to configure the extension, see steps below.
@@ -37,17 +40,17 @@ Coming soon.
 2.  You must configure the following:
     -   `Vault URL`: The REST API URL for your vault (from the [Local Rest API](https://github.com/coddingtonbear/obsidian-local-rest-api) Obsidian plugin settings)
     -   `Vault API Key`: The REST API key for your vault (from the [Local Rest API](https://github.com/coddingtonbear/obsidian-local-rest-api) Obsidian plugin settings)
-    -   `Match By Content`: If enabled, a new bookmark/clip will be created only if one matching the content provided (see below) doesn't already exist. Please bear in mind notes are always matched by name, even if this is disabled.
-    -   `Content Match`: If `Match By Content` is enabled, this is the content existing notes will be matched against. You can use the `{title}` and `{url}` placeholders.
+    -   `Match By Query`: If enabled, a new bookmark/clip will be created only if one matching the given Obsidian query (see below) doesn't already exist. Please bear in mind notes are always matched by name, even if this is disabled.
+    -   `Obsidian Query`: the query to use for finding existing notes if `Match By Query` is enabled. You can use the `{title}` and `{url}` placeholders.
     -   `Note Name`: The name of the note you want to create
 3.  You can specify the clipping template using placeholders like `{clip}`, `{date}`, `{month}` or `{year}`.
 4.  Decide if you want a markdown clip (HTML is converted to markdown) or plain text by enabling/disabling `Clip HTML as markdown`.
 5.  Save and test it!
 
-Once configured, you're now good to go, using it only takes two steps:
+Once configured, you're now good to go! It's as simple as:
 
 1.  Make a selection on a page and click the icon of the extension.
-2.  Obsidian will create the specified note within the vault.
+2.  Obsidian will automatically create the specified note within the vault.
 
 ## Troubleshooting
 
